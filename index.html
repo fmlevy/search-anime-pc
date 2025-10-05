@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Search Anime - Your personal assistant for finding the perfect anime</title>
+
+	<link rel="stylesheet" href="src/css/reset.css" />
+	<link rel="stylesheet" href="src/css/styles.css" />
+
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+		rel="stylesheet" />
+</head>
+
+<body>
+	<div class="bg"></div>
+	<div class="bg bg2"></div>
+	<div class="bg bg3"></div>
+
+	<main class="container">
+		<div class="main-content">
+			<header class="brand-header">
+				<div class="container-logo">
+					<img src="src/images/Levy-attack.png" alt="Assistente robô BotFlix" class="robot-image" />
+					<h1 class="brand-title">Search Anime</h1>
+				</div>
+
+				<p class="brand-subtitle">Your personal assistant for finding the perfect anime</p>
+			</header>
+
+			<section class="search-card">
+				<div class="search-content">
+					<div class="input-container">
+						<textarea rows="3" id="mood-textarea" placeholder="Type how you're feeling or want to watch..."
+							class="mood-textarea"></textarea>
+					</div>
+
+					<div class="examples">
+						<h3 class="examples-title">Examples:</h3>
+						<ul class="examples-list">
+							<li>I want something fun to relax after work.</li>
+							<li>I'm looking for a horror movie that will keep me up at night.</li>
+							<li>Something romantic to watch with my girlfriend</li>
+						</ul>
+					</div>
+
+					<button id="search-button" class="search-button">
+						<span class="play-icon">&#9654;</span>
+						Finding Perfect Anime
+					</button>
+				</div>
+			</section>
+
+			<div id="results" class="results">
+				<h2 id="results-title">Perfect Anime For You</h2>
+				<div id="loader" class="loader" style="display: none;"></div>
+				<div id="movies-grid" class="movies-grid"></div>
+			</div>
+		</div>
+	</main>
+
+	<script src="./src/js/index.js"></script>
+</body>
+
+</html>

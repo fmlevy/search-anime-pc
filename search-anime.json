@@ -1,0 +1,171 @@
+{
+  "name": "search-anime",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -704,
+        16
+      ],
+      "id": "595f9af7-5d3f-4436-822d-0d207db84ea6",
+      "name": "When chat message received",
+      "webhookId": "9bd823c2-96c4-4584-bdc9-a842b9e66a21"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "search-anime",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -240,
+        -112
+      ],
+      "id": "e55292e9-9e12-49db-bd9b-23b336b11227",
+      "name": "Webhook1",
+      "webhookId": "a1d89e5c-45ad-4564-9dbf-d14045ae6c56"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        576,
+        -112
+      ],
+      "id": "f22ee626-32f9-4938-8131-1855e4b7c243",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.userPrompt }}",
+        "options": {
+          "systemMessage": "Você é um especialista em indicar animes reais e atuais.\n\nQuando o usuário pedir uma recomendação, você deve buscar mentalmente 1 anime que exista de verdade e que se encaixem na categoria solicitada.\n\nRegras:\n\n- Não invente nome de animes.\n- Priorize títulos populares e bem avaliados.\n- Retorne somente 1 anime por vez.\n\nFORMATO DE RESPOSTA OBRIGATÓRIO:\nResponda SOMENTE com este JSON (sem texto adicional)\n\n(\"Title\": \"TÍTULO EXATO DO ANIME\")\n\nREGRAS CRÍTICAS:\n\n- SEM texto antes ou depois do JSON\n- Sem explicações ou comentários\n- SEM backticks ou markdown\n- SEM a palavra output\n- APENAS o array JSON válido"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        16,
+        -112
+      ],
+      "id": "91d0377a-4896-4090-8a17-5faab5c28d27",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        16,
+        112
+      ],
+      "id": "8235393c-0cc4-4995-a2ca-37deb4dff2de",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "wjBjhYT9CN3Szf10",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://api.jikan.moe/v4/anime",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "={{ $json.output }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        368,
+        -112
+      ],
+      "id": "f8459910-9050-4055-bafb-d91b25195172",
+      "name": "HTTP Request"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        []
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "2351ed47-c97c-4ad1-a327-242a2b1e1014",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c325f8275b69fec5d554f0cdcafa27aebc9ea92fbedc65905f8c0c46c4fa0399"
+  },
+  "id": "g2UwBSHYT2k7DNT0",
+  "tags": []
+}
